@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Be My Valentine</title>
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: #1f2933;
+            color: white;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #ff9aa2;
+        }
+
+        p {
+            font-size: 22px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            font-size: 24px;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .yes {
+            background: #ff4d6d;
+            color: white;
+        }
+
+        .no {
+            background: #e5e7eb;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Be My <span style="color:#7CFC00">Valentine</span></h1>
+<h2>Gautam ❤️ Ilakiya</h2>
+
+<p>Ilakiya, will you be my Valentine? 💖</p>
+
+<button class="yes" onclick="yesClick()">Yes</button>
+<button class="no" onclick="noClick()">No</button>
+
+<script>
+    let i = 0;
+    let messages = [
+        "No",
+        "Are you sure?",
+        "Think again 😏",
+        "I’ll be sad 😢",
+        "Very sad 😭",
+        "Ilakiya please 💔"
+    ];
+
+    function noClick() {
+        let noBtn = document.querySelector('.no');
+        let yesBtn = document.querySelector('.yes');
+
+        noBtn.innerText = messages[i];
+        i = (i + 1) % messages.length;
+
+        let size = window.getComputedStyle(yesBtn).fontSize;
+        yesBtn.style.fontSize = (parseFloat(size) * 1.3) + "px";
+    }
+
+    function yesClick() {
+        window.location.href = "yes.html";
+    }
+</script>
+
+</body>
+</html>
