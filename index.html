@@ -5,122 +5,118 @@
 <title>Be My Valentine</title>
 
 <style>
-    body {
-        height: 100vh;
-        margin: 0;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        font-family: Arial, sans-serif;
-        background: linear-gradient(to bottom, #1f2933, #111827);
-        color: white;
-        text-align: center;
-    }
+body {
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle, #1f2933, #020617);
+    color: white;
+    text-align: center;
+}
 
-    h1 {
-        font-size: 40px;
-        margin-bottom: 5px;
-    }
+/* Glow effect */
+body::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 120px rgba(255,77,109,0.3);
+    pointer-events: none;
+}
 
-    h2 {
-        font-size: 22px;
-        color: #ff9aa2;
-        margin-bottom: 20px;
-    }
+h1 { font-size: 40px; }
+h2 { font-size: 22px; color: #ff9aa2; }
+p  { font-size: 20px; margin-bottom: 25px; }
 
-    p {
-        font-size: 20px;
-        margin-bottom: 25px;
-    }
+.buttons {
+    position: relative;
+    width: 100%;
+    height: 150px;
+}
 
-    .buttons {
-        position: relative;
-        width: 100%;
-        height: 140px;
-    }
+button {
+    font-size: 22px;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    position: absolute;
+}
 
-    button {
-        font-size: 22px;
-        padding: 14px 30px;
-        border: none;
-        border-radius: 14px;
-        cursor: pointer;
-        position: absolute;
-    }
+/* YES button pulse */
+.yes {
+    background: #ff4d6d;
+    color: white;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: heartbeat 1.2s infinite;
+}
 
-    /* YES button */
-    .yes {
-        background: #ff4d6d;
-        color: white;
-        left: 50%;
-        transform: translateX(-50%);
-        animation: pulse 1.5s infinite;
-    }
+@keyframes heartbeat {
+    0%   { transform: translateX(-50%) scale(1); }
+    25%  { transform: translateX(-50%) scale(1.15); }
+    50%  { transform: translateX(-50%) scale(1); }
+    75%  { transform: translateX(-50%) scale(1.2); }
+    100% { transform: translateX(-50%) scale(1); }
+}
 
-    /* Pulse animation */
-    @keyframes pulse {
-        0%   { transform: translateX(-50%) scale(1); }
-        50%  { transform: translateX(-50%) scale(1.15); }
-        100% { transform: translateX(-50%) scale(1); }
-    }
+.no {
+    background: #e5e7eb;
+    color: black;
+    left: 30%;
+    top: 80px;
+}
 
-    /* NO button */
-    .no {
-        background: #e5e7eb;
-        color: black;
-        left: 30%;
-        top: 70px;
-    }
+/* Floating hearts */
+.heart {
+    position: absolute;
+    bottom: -20px;
+    font-size: 20px;
+    animation: floatUp 6s linear infinite;
+}
 
-    /* Floating hearts */
-    .heart {
-        position: absolute;
-        bottom: -20px;
-        font-size: 20px;
-        animation: floatUp 6s linear infinite;
-        opacity: 0.8;
-    }
+@keyframes floatUp {
+    from { transform: translateY(0); opacity: 1; }
+    to   { transform: translateY(-100vh); opacity: 0; }
+}
 
-    @keyframes floatUp {
-        from { transform: translateY(0); opacity: 1; }
-        to   { transform: translateY(-100vh); opacity: 0; }
-    }
+/* Confetti */
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    animation: fall 2s linear forwards;
+}
 
-    /* Confetti */
-    .confetti {
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background-color: red;
-        animation: confettiFall 2s linear forwards;
-    }
+@keyframes fall {
+    from { transform: translateY(0) rotate(0); }
+    to   { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
 
-    @keyframes confettiFall {
-        from {
-            transform: translateY(0) rotate(0deg);
-            opacity: 1;
-        }
-        to {
-            transform: translateY(100vh) rotate(720deg);
-            opacity: 0;
-        }
-    }
-
-    /* Mobile friendly */
-    @media (max-width: 600px) {
-        h1 { font-size: 32px; }
-        p { font-size: 18px; }
-        button { font-size: 18px; }
-    }
+/* Music button */
+.music-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: none;
+    background: #ff4d6d;
+    color: white;
+}
 </style>
 </head>
 
-<body>
+<body onclick="startMusic()">
 
-<!-- Background music -->
-<audio autoplay loop>
+<button class="music-btn" onclick="toggleMusic(event)">🔊 Music</button>
+
+<audio id="music" loop>
     <source src="music.mp3" type="audio/mpeg">
 </audio>
 
@@ -134,47 +130,59 @@
 </div>
 
 <script>
-    /* NO button runs away */
-    function moveNo() {
-        const noBtn = document.querySelector('.no');
-        noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
-        noBtn.style.top  = Math.random() * (window.innerHeight - 100) + "px";
+let musicStarted = false;
+const music = document.getElementById("music");
+
+/* Start music on first interaction */
+function startMusic() {
+    if (!musicStarted) {
+        music.play();
+        musicStarted = true;
     }
+}
 
-    /* YES click */
-    function yesClick() {
-        launchConfetti();
-        setTimeout(() => {
-            window.location.href = "yes.html";
-        }, 1500);
+/* Toggle music */
+function toggleMusic(e) {
+    e.stopPropagation();
+    music.paused ? music.play() : music.pause();
+}
+
+/* NO button run */
+function moveNo() {
+    const no = document.querySelector('.no');
+    no.style.left = Math.random() * (window.innerWidth - 100) + "px";
+    no.style.top  = Math.random() * (window.innerHeight - 100) + "px";
+}
+
+/* YES click */
+function yesClick() {
+    launchConfetti();
+    setTimeout(() => location.href = "yes.html", 1500);
+}
+
+/* Hearts */
+setInterval(() => {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "❤️";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.fontSize = (Math.random() * 20 + 15) + "px";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 6000);
+}, 250);
+
+/* Confetti */
+function launchConfetti() {
+    for (let i = 0; i < 150; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.backgroundColor =
+            ["#ff4d6d","#ffd166","#06d6a0","#4dabf7"][Math.floor(Math.random()*4)];
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 2000);
     }
-
-    /* Floating hearts */
-    setInterval(() => {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.innerHTML = "❤️";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.fontSize = (Math.random() * 20 + 15) + "px";
-        document.body.appendChild(heart);
-
-        setTimeout(() => heart.remove(), 6000);
-    }, 300);
-
-    /* Confetti blast */
-    function launchConfetti() {
-        for (let i = 0; i < 120; i++) {
-            const confetti = document.createElement("div");
-            confetti.className = "confetti";
-            confetti.style.left = Math.random() * 100 + "vw";
-            confetti.style.backgroundColor =
-                ["#ff4d6d", "#ffd166", "#06d6a0", "#4dabf7"][Math.floor(Math.random() * 4)];
-            confetti.style.animationDuration = (Math.random() * 1 + 1.5) + "s";
-            document.body.appendChild(confetti);
-
-            setTimeout(() => confetti.remove(), 2000);
-        }
-    }
+}
 </script>
 
 </body>
