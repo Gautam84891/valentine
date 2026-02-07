@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Be My Valentine</title>
+<title>Proposal 💍</title>
 
 <style>
 body {
@@ -19,7 +19,7 @@ body {
     text-align: center;
 }
 
-/* Glow effect */
+/* Glow */
 body::after {
     content: "";
     position: absolute;
@@ -30,7 +30,7 @@ body::after {
 
 h1 { font-size: 40px; }
 h2 { font-size: 22px; color: #ff9aa2; }
-p  { font-size: 20px; margin-bottom: 25px; }
+p  { font-size: 20px; margin-bottom: 20px; }
 
 .buttons {
     position: relative;
@@ -47,7 +47,7 @@ button {
     position: absolute;
 }
 
-/* YES button pulse */
+/* YES pulse */
 .yes {
     background: #ff4d6d;
     color: white;
@@ -57,10 +57,10 @@ button {
 }
 
 @keyframes heartbeat {
-    0%   { transform: translateX(-50%) scale(1); }
-    25%  { transform: translateX(-50%) scale(1.15); }
-    50%  { transform: translateX(-50%) scale(1); }
-    75%  { transform: translateX(-50%) scale(1.2); }
+    0% { transform: translateX(-50%) scale(1); }
+    25% { transform: translateX(-50%) scale(1.15); }
+    50% { transform: translateX(-50%) scale(1); }
+    75% { transform: translateX(-50%) scale(1.2); }
     100% { transform: translateX(-50%) scale(1); }
 }
 
@@ -71,7 +71,7 @@ button {
     top: 80px;
 }
 
-/* Floating hearts */
+/* Hearts */
 .heart {
     position: absolute;
     bottom: -20px;
@@ -81,20 +81,39 @@ button {
 
 @keyframes floatUp {
     from { transform: translateY(0); opacity: 1; }
-    to   { transform: translateY(-100vh); opacity: 0; }
+    to { transform: translateY(-100vh); opacity: 0; }
 }
 
-/* Confetti */
-.confetti {
+/* Fireworks */
+.firework {
     position: absolute;
-    width: 10px;
-    height: 10px;
-    animation: fall 2s linear forwards;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    animation: explode 1s ease-out forwards;
 }
 
-@keyframes fall {
-    from { transform: translateY(0) rotate(0); }
-    to   { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+@keyframes explode {
+    from { transform: scale(1); opacity: 1; }
+    to { transform: scale(8); opacity: 0; }
+}
+
+/* Proposal screen */
+#proposal {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+    color: #7a003c;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+#typewriter {
+    font-size: 26px;
+    max-width: 600px;
 }
 
 /* Music button */
@@ -129,11 +148,17 @@ button {
     <button class="no" onmouseover="moveNo()">No</button>
 </div>
 
+<!-- Proposal Screen -->
+<div id="proposal">
+    <h1>💍 Gautam ❤️ Ilakiya 💍</h1>
+    <p id="typewriter"></p>
+</div>
+
 <script>
+/* MUSIC */
 let musicStarted = false;
 const music = document.getElementById("music");
 
-/* Start music on first interaction */
 function startMusic() {
     if (!musicStarted) {
         music.play();
@@ -141,23 +166,16 @@ function startMusic() {
     }
 }
 
-/* Toggle music */
 function toggleMusic(e) {
     e.stopPropagation();
     music.paused ? music.play() : music.pause();
 }
 
-/* NO button run */
+/* NO run */
 function moveNo() {
     const no = document.querySelector('.no');
     no.style.left = Math.random() * (window.innerWidth - 100) + "px";
     no.style.top  = Math.random() * (window.innerHeight - 100) + "px";
-}
-
-/* YES click */
-function yesClick() {
-    launchConfetti();
-    setTimeout(() => location.href = "yes.html", 1500);
 }
 
 /* Hearts */
@@ -166,22 +184,44 @@ setInterval(() => {
     h.className = "heart";
     h.innerHTML = "❤️";
     h.style.left = Math.random() * 100 + "vw";
-    h.style.fontSize = (Math.random() * 20 + 15) + "px";
     document.body.appendChild(h);
     setTimeout(() => h.remove(), 6000);
 }, 250);
 
-/* Confetti */
-function launchConfetti() {
-    for (let i = 0; i < 150; i++) {
-        const c = document.createElement("div");
-        c.className = "confetti";
-        c.style.left = Math.random() * 100 + "vw";
-        c.style.backgroundColor =
+/* YES → Proposal Mode */
+function yesClick() {
+    document.querySelector('.buttons').style.display = "none";
+    document.getElementById("proposal").style.display = "flex";
+    startTypewriter();
+    fireworks();
+}
+
+/* Typewriter */
+const text =
+"Gautam ❤️ Ilakiya\n\nFrom this moment till forever,\nwill you marry me and be my life partner? 💍💖";
+let i = 0;
+
+function startTypewriter() {
+    const el = document.getElementById("typewriter");
+    const timer = setInterval(() => {
+        el.innerHTML += text[i] === "\n" ? "<br>" : text[i];
+        i++;
+        if (i >= text.length) clearInterval(timer);
+    }, 60);
+}
+
+/* Fireworks */
+function fireworks() {
+    setInterval(() => {
+        const f = document.createElement("div");
+        f.className = "firework";
+        f.style.left = Math.random() * 100 + "vw";
+        f.style.top = Math.random() * 100 + "vh";
+        f.style.background =
             ["#ff4d6d","#ffd166","#06d6a0","#4dabf7"][Math.floor(Math.random()*4)];
-        document.body.appendChild(c);
-        setTimeout(() => c.remove(), 2000);
-    }
+        document.body.appendChild(f);
+        setTimeout(() => f.remove(), 1000);
+    }, 300);
 }
 </script>
 
