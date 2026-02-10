@@ -1,241 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Gautam ❤️ Ilakiya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine</title>
 
 <style>
 body {
-    height: 100vh;
     margin: 0;
-    overflow: hidden;
+    height: 100vh;
+    background: #0f172a;
+    color: white;
+    font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-family: Arial, sans-serif;
-    background: radial-gradient(circle, #1f2933, #020617);
-    color: white;
-    text-align: center;
-}
-
-/* Glow */
-body::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    box-shadow: inset 0 0 120px rgba(255,77,109,0.3);
-    pointer-events: none;
+    overflow: hidden;
 }
 
 h1 { font-size: 40px; }
-h2 { font-size: 22px; color: #ff9aa2; }
-p  { font-size: 20px; margin-bottom: 25px; }
-
-/* Buttons */
-.buttons {
-    position: relative;
-    width: 100%;
-    height: 160px;
-}
+h2 { color: pink; }
 
 button {
+    padding: 15px 30px;
     font-size: 22px;
-    padding: 14px 32px;
     border: none;
-    border-radius: 14px;
+    border-radius: 12px;
     cursor: pointer;
     position: absolute;
 }
 
-.yes {
+#yes {
     background: #ff4d6d;
     color: white;
-    left: 50%;
-    top: 10px;
-    transform: translateX(-50%);
-    animation: heartbeat 1.2s infinite;
+    bottom: 120px;
+    animation: pulse 1.2s infinite;
 }
 
-@keyframes heartbeat {
-    0% { transform: translateX(-50%) scale(1); }
-    25% { transform: translateX(-50%) scale(1.15); }
-    50% { transform: translateX(-50%) scale(1); }
-    75% { transform: translateX(-50%) scale(1.2); }
-    100% { transform: translateX(-50%) scale(1); }
-}
-
-.no {
+#no {
     background: #e5e7eb;
     color: black;
-    left: 35%;
-    top: 90px;
+    bottom: 120px;
+    left: 60%;
 }
 
-/* Hearts */
-.heart {
-    position: absolute;
-    bottom: -20px;
-    font-size: 20px;
-    animation: floatUp 6s linear infinite;
-}
-
-@keyframes floatUp {
-    from { transform: translateY(0); opacity: 1; }
-    to   { transform: translateY(-100vh); opacity: 0; }
-}
-
-/* Proposal screen */
-#proposal {
-    display: none;
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
-    color: #7a003c;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 20px;
-}
-
-/* Slideshow */
-#slideshow {
-    width: 280px;
-    height: 380px;
-    border-radius: 20px;
-    overflow: hidden;
-    margin-bottom: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-#slideshow img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    opacity: 0;
-    transition: opacity 1.2s ease-in-out;
-}
-
-#slideshow img.active {
-    opacity: 1;
-}
-
-/* Fireworks */
-.firework {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    animation: explode 1s ease-out forwards;
-}
-
-@keyframes explode {
-    from { transform: scale(1); opacity: 1; }
-    to   { transform: scale(8); opacity: 0; }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
 }
 </style>
 </head>
 
 <body>
 
-<!-- Music -->
-<audio id="music" loop>
-    <source src="music.mp3" type="audio/mpeg">
-</audio>
+<h1>Be My Valentine 💖</h1>
+<p>Ilakiya, will you marry me? 💍</p>
 
-<h1>Be My <span style="color:#7CFC00">Valentine</span></h1>
-<p>Ilakiya, will you be my Valentine? 💖</p>
-
-<div class="buttons">
-    <button class="yes" onclick="yesClick()">Yes</button>
-    <button class="no" onmouseover="moveNo()">No</button>
-</div>
-
-<!-- Proposal Mode -->
-<div id="proposal">
-    <div id="slideshow">
-        <img src="photos/photo1.jpg" class="active">
-        <img src="photos/photo2.jpg">
-        <img src="photos/photo3.jpg">
-        <img src="photos/photo4.jpg">
-    </div>
-
-    <h1>💍 Gautam ❤️ Ilakiya 💍</h1>
-    <p id="typewriter"></p>
-</div>
+<button id="yes" onclick="goYes()">YES</button>
+<button id="no" onmouseover="runAway()">NO</button>
 
 <script>
-const music = document.getElementById("music");
-
-/* NO runs */
-function moveNo() {
-    const no = document.querySelector('.no');
-    no.style.left = Math.random() * (window.innerWidth - 120) + "px";
-    no.style.top  = Math.random() * (window.innerHeight - 120) + "px";
+function runAway() {
+    const no = document.getElementById("no");
+    no.style.left = Math.random() * 80 + "%";
+    no.style.top  = Math.random() * 80 + "%";
 }
 
-/* Hearts */
-setInterval(() => {
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.innerHTML = "❤️";
-    h.style.left = Math.random() * 100 + "vw";
-    document.body.appendChild(h);
-    setTimeout(() => h.remove(), 6000);
-}, 300);
-
-/* YES click */
-function yesClick() {
-    music.play();
-    document.querySelector('.buttons').style.display = "none";
-    document.getElementById("proposal").style.display = "flex";
-    startTypewriter();
-    startSlideshow();
-    fireworks();
-}
-
-/* Typewriter */
-const text =
-"Gautam ❤️ Ilakiya\n\nFrom this moment till forever,\nwill you marry me and be my life partner? 💍💖";
-let i = 0;
-
-function startTypewriter() {
-    const el = document.getElementById("typewriter");
-    const timer = setInterval(() => {
-        el.innerHTML += text[i] === "\n" ? "<br>" : text[i];
-        i++;
-        if (i >= text.length) clearInterval(timer);
-    }, 60);
-}
-
-/* Slideshow */
-function startSlideshow() {
-    const images = document.querySelectorAll("#slideshow img");
-    let index = 0;
-
-    setInterval(() => {
-        images[index].classList.remove("active");
-        index = (index + 1) % images.length;
-        images[index].classList.add("active");
-    }, 3000);
-}
-
-/* Fireworks */
-function fireworks() {
-    setInterval(() => {
-        const f = document.createElement("div");
-        f.className = "firework";
-        f.style.left = Math.random() * 100 + "vw";
-        f.style.top  = Math.random() * 100 + "vh";
-        f.style.background =
-            ["#ff4d6d","#ffd166","#06d6a0","#4dabf7"][Math.floor(Math.random()*4)];
-        document.body.appendChild(f);
-        setTimeout(() => f.remove(), 1000);
-    }, 300);
+function goYes() {
+    window.location.href = "yes.html";
 }
 </script>
 
 </body>
 </html>
-
