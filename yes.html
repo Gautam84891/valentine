@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Forever ❤️</title>
 
@@ -20,27 +21,23 @@ body {
     height: 100%;
     background-size: cover;
     background-position: center;
-    animation: zoom 6s infinite;
-}
-
-@keyframes zoom {
-    from { transform: scale(1); }
-    to { transform: scale(1.1); }
+    transition: background-image 1.5s ease-in-out;
 }
 
 #overlay {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.45);
 }
 
 #text {
     position: absolute;
-    bottom: 20%;
+    bottom: 18%;
     width: 100%;
     text-align: center;
     font-size: 28px;
+    padding: 0 10px;
 }
 </style>
 </head>
@@ -51,44 +48,51 @@ body {
 <div id="overlay"></div>
 <div id="text"></div>
 
-<audio id="music" autoplay loop>
+<audio id="music" loop>
     <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-// SLIDESHOW
-let images = [
-    "photos/1.jpg",
-    "photos/2.jpg",
-    "photos/3.jpg",
-    "photos/4.jpg"
+// ▶ PLAY MUSIC AFTER USER INTERACTION
+window.addEventListener("click", () => {
+    document.getElementById("music").play();
+}, { once: true });
+
+// 🖼 SLIDESHOW (.jpeg)
+const images = [
+    "./photos/1.jpeg",
+    "./photos/2.jpeg",
+    "./photos/3.jpeg",
+    "./photos/4.jpeg"
 ];
+
 let index = 0;
-let slide = document.getElementById("slideshow");
+const slide = document.getElementById("slideshow");
+slide.style.backgroundImage = `url(${images[0]})`;
 
 setInterval(() => {
-    slide.style.backgroundImage = `url(${images[index]})`;
     index = (index + 1) % images.length;
+    slide.style.backgroundImage = `url(${images[index]})`;
 }, 4000);
 
-// TYPEWRITER
-let msg = "Gautam ❤️ Ilakiya\nForever & Always 💍";
+// 💬 TYPEWRITER MESSAGE
+const message = "Gautam ❤️ Ilakiya\nForever & Always 💍";
 let i = 0;
-let textDiv = document.getElementById("text");
+const textDiv = document.getElementById("text");
 
-function type() {
-    if (i < msg.length) {
-        textDiv.innerHTML += msg[i] === "\n" ? "<br>" : msg[i];
+function typeWriter() {
+    if (i < message.length) {
+        textDiv.innerHTML += message[i] === "\n" ? "<br>" : message[i];
         i++;
-        setTimeout(type, 100);
+        setTimeout(typeWriter, 90);
     }
 }
-type();
+typeWriter();
 
-// CONFETTI + FIREWORKS
+// 🎉 CONFETTI
 function confetti() {
-    for (let i = 0; i < 100; i++) {
-        let d = document.createElement("div");
+    for (let i = 0; i < 25; i++) {
+        const d = document.createElement("div");
         d.style.position = "absolute";
         d.style.width = "8px";
         d.style.height = "8px";
@@ -97,16 +101,17 @@ function confetti() {
         d.style.top = "-10px";
         d.style.animation = "fall 3s linear";
         document.body.appendChild(d);
-
         setTimeout(() => d.remove(), 3000);
     }
 }
-setInterval(confetti, 1500);
+setInterval(confetti, 1200);
 </script>
 
 <style>
 @keyframes fall {
-    to { transform: translateY(110vh) rotate(360deg); }
+    to {
+        transform: translateY(110vh) rotate(360deg);
+    }
 }
 </style>
 
