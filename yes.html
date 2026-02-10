@@ -9,11 +9,11 @@
 body {
     margin: 0;
     background: black;
-    font-family: Arial, sans-serif;
     overflow: hidden;
+    font-family: Arial, sans-serif;
 }
 
-/* 📱 Reel container */
+/* 📱 Vertical Reel container */
 #reel {
     position: relative;
     width: 100vw;
@@ -23,29 +23,25 @@ body {
     background: black;
 }
 
-/* ❤️ Heart-shaped photo */
+/* 🖼 Fullscreen photo */
 #photo {
     position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 280px;
-    height: 280px;
+    inset: 0;
     background-size: cover;
     background-position: center;
-    clip-path: path("M140 260 C-40 150 20 -40 140 60 C260 -40 320 150 140 260 Z");
-    transition: background-image 1s ease-in-out;
+    transition: opacity 1s ease-in-out;
 }
 
 /* 💬 Text */
 #text {
     position: absolute;
-    bottom: 18%;
+    bottom: 12%;
     width: 100%;
     text-align: center;
-    font-size: 24px;
+    font-size: 26px;
     color: white;
     padding: 0 15px;
+    text-shadow: 0 2px 6px black;
 }
 </style>
 </head>
@@ -62,12 +58,12 @@ body {
 </audio>
 
 <script>
-/* ▶ Music plays only after YES click */
+/* ▶ Music plays after YES click */
 window.addEventListener("click", () => {
     document.getElementById("music").play();
 }, { once: true });
 
-/* 🖼 7-photo slideshow (.jpeg) */
+/* 🖼 7-photo fullscreen slideshow (.jpeg) */
 const images = [
     "./photos/1.jpeg",
     "./photos/2.jpeg",
@@ -83,24 +79,9 @@ const photo = document.getElementById("photo");
 photo.style.backgroundImage = `url(${images[0]})`;
 
 setInterval(() => {
-    index = (index + 1) % images.length;
-    photo.style.backgroundImage = `url(${images[index]})`;
-}, 3500);
-
-/* 💬 Typewriter message */
-const message = "Gautam ❤️ Ilakiya\nForever & Always 💍";
-let i = 0;
-const textDiv = document.getElementById("text");
-
-function typeWriter() {
-    if (i < message.length) {
-        textDiv.innerHTML += message[i] === "\n" ? "<br>" : message[i];
-        i++;
-        setTimeout(typeWriter, 90);
-    }
-}
-typeWriter();
-</script>
-
-</body>
-</html>
+    photo.style.opacity = 0;
+    setTimeout(() => {
+        index = (index + 1) % images.length;
+        photo.style.backgroundImage = `url(${images[index]})`;
+        photo.style.opacity = 1;
+    }, 1
