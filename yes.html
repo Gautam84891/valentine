@@ -6,16 +6,14 @@
 <title>Forever ❤️</title>
 
 <style>
-/* 📱 Instagram Reel 9:16 */
 body {
     margin: 0;
     background: black;
-    overflow: hidden;
     font-family: Arial, sans-serif;
-    color: white;
+    overflow: hidden;
 }
 
-/* Reel container */
+/* 📱 Reel container */
 #reel {
     position: relative;
     width: 100vw;
@@ -23,7 +21,6 @@ body {
     max-width: 430px;
     margin: auto;
     background: black;
-    overflow: hidden;
 }
 
 /* ❤️ Heart-shaped photo */
@@ -37,13 +34,7 @@ body {
     background-size: cover;
     background-position: center;
     clip-path: path("M140 260 C-40 150 20 -40 140 60 C260 -40 320 150 140 260 Z");
-    animation: zoom 5s infinite alternate;
-}
-
-/* Soft zoom */
-@keyframes zoom {
-    from { transform: translateX(-50%) scale(1); }
-    to { transform: translateX(-50%) scale(1.08); }
+    transition: background-image 1s ease-in-out;
 }
 
 /* 💬 Text */
@@ -53,19 +44,8 @@ body {
     width: 100%;
     text-align: center;
     font-size: 24px;
+    color: white;
     padding: 0 15px;
-}
-
-/* 🎉 Confetti */
-.confetti {
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    animation: fall 3s linear forwards;
-}
-
-@keyframes fall {
-    to { transform: translateY(110vh) rotate(360deg); }
 }
 </style>
 </head>
@@ -82,55 +62,44 @@ body {
 </audio>
 
 <script>
-/* ▶ Music plays after user click (required by browser) */
+/* ▶ Music plays only after YES click */
 window.addEventListener("click", () => {
     document.getElementById("music").play();
 }, { once: true });
 
-/* ❤️ Heart slideshow (.jpeg) */
+/* 🖼 7-photo slideshow (.jpeg) */
 const images = [
     "./photos/1.jpeg",
     "./photos/2.jpeg",
     "./photos/3.jpeg",
-    "./photos/4.jpeg"
+    "./photos/4.jpeg",
+    "./photos/5.jpeg",
+    "./photos/6.jpeg",
+    "./photos/7.jpeg"
 ];
 
-let imgIndex = 0;
+let index = 0;
 const photo = document.getElementById("photo");
 photo.style.backgroundImage = `url(${images[0]})`;
 
 setInterval(() => {
-    imgIndex = (imgIndex + 1) % images.length;
-    photo.style.backgroundImage = `url(${images[imgIndex]})`;
+    index = (index + 1) % images.length;
+    photo.style.backgroundImage = `url(${images[index]})`;
 }, 3500);
 
-/* 💬 Typewriter proposal */
-const msg = "Gautam ❤️ Ilakiya\nForever & Always 💍";
+/* 💬 Typewriter message */
+const message = "Gautam ❤️ Ilakiya\nForever & Always 💍";
 let i = 0;
 const textDiv = document.getElementById("text");
 
-function type() {
-    if (i < msg.length) {
-        textDiv.innerHTML += msg[i] === "\n" ? "<br>" : msg[i];
+function typeWriter() {
+    if (i < message.length) {
+        textDiv.innerHTML += message[i] === "\n" ? "<br>" : message[i];
         i++;
-        setTimeout(type, 90);
+        setTimeout(typeWriter, 90);
     }
 }
-type();
-
-/* 🎉 Confetti blast */
-function confettiBlast() {
-    for (let i = 0; i < 20; i++) {
-        const c = document.createElement("div");
-        c.className = "confetti";
-        c.style.background = `hsl(${Math.random()*360},100%,50%)`;
-        c.style.left = Math.random() * 100 + "%";
-        c.style.top = "-10px";
-        document.body.appendChild(c);
-        setTimeout(() => c.remove(), 3000);
-    }
-}
-setInterval(confettiBlast, 1200);
+typeWriter();
 </script>
 
 </body>
