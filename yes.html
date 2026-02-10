@@ -1,36 +1,114 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Forever ❤️</title>
 
 <style>
-    body {
-        height: 100vh;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(to bottom, pink, #ffb6c1);
-        font-family: Arial, sans-serif;
-        text-align: center;
-    }
+body {
+    margin: 0;
+    height: 100vh;
+    background: black;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    color: white;
+}
 
-    h1 {
-        font-size: 42px;
-        color: #d6336c;
-    }
+#slideshow {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    animation: zoom 6s infinite;
+}
 
-    h2 {
-        font-size: 26px;
-        color: #b0004e;
-    }
+@keyframes zoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+}
+
+#overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+
+#text {
+    position: absolute;
+    bottom: 20%;
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+}
 </style>
 </head>
 
 <body>
-    <h1>Yayyyy 💖</h1>
-    <h2>Gautam ❤️ Ilakiya</h2>
-    <h1>Forever Valentine 😍</h1>
+
+<div id="slideshow"></div>
+<div id="overlay"></div>
+<div id="text"></div>
+
+<audio id="music" autoplay loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// SLIDESHOW
+let images = [
+    "photos/1.jpg",
+    "photos/2.jpg",
+    "photos/3.jpg",
+    "photos/4.jpg"
+];
+let index = 0;
+let slide = document.getElementById("slideshow");
+
+setInterval(() => {
+    slide.style.backgroundImage = `url(${images[index]})`;
+    index = (index + 1) % images.length;
+}, 4000);
+
+// TYPEWRITER
+let msg = "Gautam ❤️ Ilakiya\nForever & Always 💍";
+let i = 0;
+let textDiv = document.getElementById("text");
+
+function type() {
+    if (i < msg.length) {
+        textDiv.innerHTML += msg[i] === "\n" ? "<br>" : msg[i];
+        i++;
+        setTimeout(type, 100);
+    }
+}
+type();
+
+// CONFETTI + FIREWORKS
+function confetti() {
+    for (let i = 0; i < 100; i++) {
+        let d = document.createElement("div");
+        d.style.position = "absolute";
+        d.style.width = "8px";
+        d.style.height = "8px";
+        d.style.background = `hsl(${Math.random()*360},100%,50%)`;
+        d.style.left = Math.random()*100 + "%";
+        d.style.top = "-10px";
+        d.style.animation = "fall 3s linear";
+        document.body.appendChild(d);
+
+        setTimeout(() => d.remove(), 3000);
+    }
+}
+setInterval(confetti, 1500);
+</script>
+
+<style>
+@keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); }
+}
+</style>
+
 </body>
 </html>
