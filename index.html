@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Proposal 💍</title>
+<title>Gautam ❤️ Ilakiya</title>
 
 <style>
 body {
@@ -19,7 +19,7 @@ body {
     text-align: center;
 }
 
-/* Soft glow */
+/* Glow */
 body::after {
     content: "";
     position: absolute;
@@ -28,10 +28,11 @@ body::after {
     pointer-events: none;
 }
 
-h1 { font-size: 40px; margin-bottom: 5px; }
-h2 { font-size: 22px; color: #ff9aa2; margin-bottom: 15px; }
+h1 { font-size: 40px; }
+h2 { font-size: 22px; color: #ff9aa2; }
 p  { font-size: 20px; margin-bottom: 25px; }
 
+/* Buttons */
 .buttons {
     position: relative;
     width: 100%;
@@ -47,7 +48,6 @@ button {
     position: absolute;
 }
 
-/* YES button pulse */
 .yes {
     background: #ff4d6d;
     color: white;
@@ -65,7 +65,6 @@ button {
     100% { transform: translateX(-50%) scale(1); }
 }
 
-/* NO button (VISIBLE) */
 .no {
     background: #e5e7eb;
     color: black;
@@ -73,7 +72,7 @@ button {
     top: 90px;
 }
 
-/* Floating hearts */
+/* Hearts */
 .heart {
     position: absolute;
     bottom: -20px;
@@ -84,20 +83,6 @@ button {
 @keyframes floatUp {
     from { transform: translateY(0); opacity: 1; }
     to   { transform: translateY(-100vh); opacity: 0; }
-}
-
-/* Fireworks */
-.firework {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    animation: explode 1s ease-out forwards;
-}
-
-@keyframes explode {
-    from { transform: scale(1); opacity: 1; }
-    to   { transform: scale(8); opacity: 0; }
 }
 
 /* Proposal screen */
@@ -113,21 +98,54 @@ button {
     padding: 20px;
 }
 
-#typewriter {
-    font-size: 26px;
-    max-width: 650px;
+/* Slideshow */
+#slideshow {
+    width: 280px;
+    height: 380px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+#slideshow img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
+}
+
+#slideshow img.active {
+    opacity: 1;
+}
+
+/* Fireworks */
+.firework {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+    from { transform: scale(1); opacity: 1; }
+    to   { transform: scale(8); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- MUSIC (will start only after YES) -->
+<!-- Music -->
 <audio id="music" loop>
     <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <h1>Be My <span style="color:#7CFC00">Valentine</span></h1>
+<h2>Gautam ❤️ Ilakiya</h2>
 <p>Ilakiya, will you be my Valentine? 💖</p>
 
 <div class="buttons">
@@ -137,6 +155,13 @@ button {
 
 <!-- Proposal Mode -->
 <div id="proposal">
+    <div id="slideshow">
+        <img src="photos/photo1.jpg" class="active">
+        <img src="photos/photo2.jpg">
+        <img src="photos/photo3.jpg">
+        <img src="photos/photo4.jpg">
+    </div>
+
     <h1>💍 Gautam ❤️ Ilakiya 💍</h1>
     <p id="typewriter"></p>
 </div>
@@ -144,14 +169,14 @@ button {
 <script>
 const music = document.getElementById("music");
 
-/* NO button runs away */
+/* NO runs */
 function moveNo() {
     const no = document.querySelector('.no');
     no.style.left = Math.random() * (window.innerWidth - 120) + "px";
     no.style.top  = Math.random() * (window.innerHeight - 120) + "px";
 }
 
-/* Floating hearts */
+/* Hearts */
 setInterval(() => {
     const h = document.createElement("div");
     h.className = "heart";
@@ -161,27 +186,40 @@ setInterval(() => {
     setTimeout(() => h.remove(), 6000);
 }, 300);
 
-/* YES click → MUSIC + PROPOSAL */
+/* YES click */
 function yesClick() {
-    music.play();               // 🎵 START MUSIC HERE
+    music.play();
     document.querySelector('.buttons').style.display = "none";
     document.getElementById("proposal").style.display = "flex";
     startTypewriter();
+    startSlideshow();
     fireworks();
 }
 
-/* Typewriter message */
+/* Typewriter */
 const text =
 "Gautam ❤️ Ilakiya\n\nFrom this moment till forever,\nwill you marry me and be my life partner? 💍💖";
-let idx = 0;
+let i = 0;
 
 function startTypewriter() {
     const el = document.getElementById("typewriter");
     const timer = setInterval(() => {
-        el.innerHTML += text[idx] === "\n" ? "<br>" : text[idx];
-        idx++;
-        if (idx >= text.length) clearInterval(timer);
+        el.innerHTML += text[i] === "\n" ? "<br>" : text[i];
+        i++;
+        if (i >= text.length) clearInterval(timer);
     }, 60);
+}
+
+/* Slideshow */
+function startSlideshow() {
+    const images = document.querySelectorAll("#slideshow img");
+    let index = 0;
+
+    setInterval(() => {
+        images[index].classList.remove("active");
+        index = (index + 1) % images.length;
+        images[index].classList.add("active");
+    }, 3000);
 }
 
 /* Fireworks */
