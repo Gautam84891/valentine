@@ -23,7 +23,7 @@ body {
     background: black;
 }
 
-/* 🎬 Fullscreen photo with cinematic motion */
+/* 🎬 Fullscreen photo */
 #photo {
     position: absolute;
     inset: 0;
@@ -33,7 +33,86 @@ body {
     transition: opacity 1s ease-in-out;
 }
 
-/* Ken Burns cinematic effect */
+/* Cinematic pan & zoom */
 @keyframes kenburns {
-    0%   { transform: scale(1) translate(0, 0); }
-    50%  { transf
+    0%   { transform: scale(1) translate(0,0); }
+    50%  { transform: scale(1.08) translate(-2%,-2%); }
+    100% { transform: scale(1.12) translate(2%,2%); }
+}
+
+/* 💬 Text */
+#text {
+    position: absolute;
+    bottom: 12%;
+    width: 100%;
+    text-align: center;
+    font-size: 26px;
+    color: white;
+    padding: 0 15px;
+    text-shadow: 0 2px 6px black;
+}
+</style>
+</head>
+
+<body>
+
+<div id="reel">
+    <div id="photo"></div>
+    <div id="text"></div>
+</div>
+
+<audio id="music" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* 🖼 Photos */
+const images = [
+    "./photos/1.jpeg",
+    "./photos/2.jpeg",
+    "./photos/3.jpeg",
+    "./photos/4.jpeg",
+    "./photos/5.jpeg",
+    "./photos/6.jpeg",
+    "./photos/7.jpeg"
+];
+
+let index = 0;
+const photo = document.getElementById("photo");
+
+/* ✅ SHOW FIRST PHOTO IMMEDIATELY */
+photo.style.backgroundImage = `url(${images[0]})`;
+
+/* 🎬 Slideshow (smooth + cinematic) */
+setInterval(() => {
+    photo.style.opacity = 0;
+    setTimeout(() => {
+        index = (index + 1) % images.length;
+        photo.style.backgroundImage = `url(${images[index]})`;
+        photo.style.opacity = 1;
+    }, 900);
+}, 3500);
+
+/* 🎵 Play music AFTER user tap (browser safe) */
+const music = document.getElementById("music");
+window.addEventListener("click", () => {
+    music.play();
+}, { once: true });
+
+/* 💬 Typewriter text */
+const message = "Gautam ❤️ Ilakiya\nForever & Always 💍";
+let i = 0;
+const textDiv = document.getElementById("text");
+
+function typeWriter() {
+    if (i < message.length) {
+        textDiv.innerHTML += message[i] === "\n" ? "<br>" : message[i];
+        i++;
+        setTimeout(typeWriter, 90);
+    }
+}
+typeWriter();
+</script>
+
+</body>
+</html>
